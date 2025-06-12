@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>السيرة الذاتية - {{ cv.full_name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base (Light Mode) Styles */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #eef2f6; /* Very light blue-grey for "desk" */
+            color: #34495e; /* Darker grey for main text */
+            line-height: 1.7;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+        }
+        .cv-container {
+            max-width: 210mm;
+            min-height: 297mm;
+            margin: 30px auto;
+            background: #ffffff; /* Pure white paper */
+            padding: 30mm;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Header Section Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 45px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed #e0e6ed;
+            transition: border-color 0.3s ease;
+        }
+        .header img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ffffff;
+            outline: 2px solid #3498db;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: outline-color 0.3s ease, border-color 0.3s ease;
+        }
+        .header h1 {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            font-size: 2.8em;
+            color: #2c3e50;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+        .header p {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-top: 8px;
+            transition: color 0.3s ease;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 35px;
+        }
+        .section-title {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.6em;
+            color: #3498db;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            position: relative;
+            font-weight: 600;
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+        .section p, .section ul {
+            font-family: 'Open Sans', sans-serif;
+            white-space: pre-wrap;
+            font-size: 1em;
+            color: #34495e;
+            margin: 0 0 10px 0;
+            transition: color 0.3s ease;
+        }
+        .contact-info {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .contact-info li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 1em;
+        }
+        .contact-info li strong {
+            color: #2c3e50;
+            flex-shrink: 0;
+            transition: color 0.3s ease;
+        }
+        /* Icon styling (if Font Awesome is used) */
+        .contact-info .icon {
+            color: #3498db;
+            font-size: 1.2em;
+            margin-top: 2px;
+            transition: color 0.3s ease;
+        }
+        .contact-info li a {
+            color: #3498db; /* Link color */
+            text-decoration: none;
+            transition: color 0.3s ease;
+            word-break: break-all; /* Helps with very long URLs */
+        }
+        .contact-info li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Certificates Grid */
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive grid */
+            gap: 15px;
+            justify-content: center;
+            padding: 10px 0;
+        }
+        .certificate-item-display {
+            text-align: center;
+            background-color: #f8fcff;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+        }
+        .certificate-item-display:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .certificate-item-display img,
+        .certificate-item-display .cert-icon {
+            max-width: 100px;
+            height: 100px;
+            object-fit: contain; /* Keep aspect ratio */
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border: 1px solid #b0c4de;
+        }
+        .certificate-item-display .cert-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em; /* Larger icon for PDF */
+            color: #dc3545;
+            background-color: #ffe0e0;
+        }
+        .certificate-item-display a {
+            text-decoration: none;
+            color: #3498db;
+            font-weight: 600;
+            font-size: 0.9em;
+            display: block;
+            word-break: break-word;
+        }
+        .certificate-item-display a:hover {
+            text-decoration: underline;
+        }
+        .certificate-item-display p {
+            margin: 0;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+
+        /* Action Buttons Bar Styling */
+        .actions-bar {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .actions-bar a, .actions-bar button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            display: inline-block;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .actions-bar a:hover, .actions-bar button:hover {
+            transform: translateY(-2px);
+        }
+        .actions-bar .back-link {
+            background-color: #7f8c8d;
+        }
+        .actions-bar .back-link:hover {
+            background-color: #6c7a89;
+        }
+        .actions-bar .edit-link {
+            background-color: #3498db;
+        }
+        .actions-bar .edit-link:hover {
+            background-color: #2980b9;
+        }
+        .actions-bar .print-button {
+            background-color: #27ae60;
+        }
+        .actions-bar .print-button:hover {
+            background-color: #229954;
+        }
+
+        /* Dark Mode Specific Styles */
+        body.dark-mode {
+            background-color: #1a2a3a;
+            color: #ecf0f1;
+        }
+        .dark-mode .cv-container {
+            background: #2c3e50;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        .dark-mode .header {
+            border-color: #4a627a;
+        }
+        .dark-mode .header img {
+            outline-color: #5dade2;
+        }
+        .dark-mode .header h1 {
+            color: #ecf0f1;
+        }
+        .dark-mode .header p {
+            color: #bdc3c7;
+        }
+        .dark-mode .section-title {
+            color: #5dade2;
+            border-color: #5dade2;
+        }
+        .dark-mode .section p, .dark-mode .section ul {
+            color: #bdc3c7;
+        }
+        .dark-mode .contact-info li strong {
+            color: #ecf0f1;
+        }
+        .dark-mode .contact-info .icon {
+            color: #5dade2;
+        }
+        .dark-mode .contact-info li a {
+            color: #5dade2;
+        }
+        .dark-mode .certificates-grid {
+            border-color: #4a627a;
+        }
+        .dark-mode .certificate-item-display {
+            background-color: #3e5369;
+            border-color: #5f7a96;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .dark-mode .certificate-item-display:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .dark-mode .certificate-item-display img,
+        .dark-mode .certificate-item-display .cert-icon {
+            border-color: #5dade2;
+            background-color: #4a627a; /* Darker background for icons */
+        }
+        .dark-mode .certificate-item-display .cert-icon {
+             color: #ff9999; /* Lighter red for dark mode PDF icon */
+        }
+        .dark-mode .certificate-item-display a {
+            color: #5dade2;
+        }
+        .dark-mode .certificate-item-display p {
+            color: #bdc3c7;
+        }
+        .dark-mode .actions-bar {
+            background-color: #34495e;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .dark-mode .actions-bar .back-link {
+            background-color: #5f7a96;
+        }
+        .dark-mode .actions-bar .back-link:hover {
+            background-color: #728c9b;
+        }
+        .dark-mode .actions-bar .edit-link {
+            background-color: #5dade2;
+        }
+        .dark-mode .actions-bar .edit-link:hover {
+            background-color: #479ed9;
+        }
+        .dark-mode .actions-bar .print-button {
+            background-color: #2ecc71;
+        }
+        .dark-mode .actions-bar .print-button:hover {
+            background-color: #27ae60;
+        }
+
+        /* Dark Mode Toggle Button */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.3s ease;
+            z-index: 1000;
+            outline: none;
+        }
+        .dark-mode-toggle:hover {
+            color: #000;
+        }
+        body.dark-mode .dark-mode-toggle {
+            color: #ecf0f1;
+        }
+        body.dark-mode .dark-mode-toggle:hover {
+            color: #fff;
+        }
+
+        /* --- Print Specific Styles --- */
+        @media print {
+            body {
+                background-color: #fff;
+                margin: 0;
+                padding: 0;
+            }
+            .cv-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 15mm;
+                width: 210mm;
+                min-height: 297mm;
+                page-break-after: always;
+            }
+            .actions-bar, .dark-mode-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle" class="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="cv-container">
+        <div class="header">
+            {% if cv.image_filename %}
+                <img src="{{ url_for('static', filename='uploads/' + cv.image_filename) }}" alt="الصورة الشخصية">
+            {% else %}
+                <img src="https://via.placeholder.com/140/f0f0f0/ffffff?text=صورة" alt="لا توجد صورة">
+            {% endif %}
+            <h1>{{ cv.full_name }}</h1>
+            <p>{{ cv.address }}</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">معلومات الاتصال</h2>
+            <ul class="contact-info">
+                <li>
+                    <strong>البريد الإلكتروني:</strong> {{ cv.email }}
+                </li>
+                <li>
+                    <strong>رقم الهاتف:</strong> {{ cv.phone }}
+                </li>
+                <li>
+                    <strong>تاريخ الميلاد:</strong> {% if cv.date_of_birth %}{{ cv.date_of_birth.strftime('%Y-%m-%d') }}{% else %}غير محدد{% endif %}
+                </li>
+                {% if cv.linkedin_profile %}
+                <li>
+                    <i class="fab fa-linkedin icon"></i>
+                    <strong>LinkedIn:</strong> <a href="{{ cv.linkedin_profile }}" target="_blank">{{ cv.linkedin_profile }}</a>
+                </li>
+                {% endif %}
+                {% if cv.github_profile %}
+                <li>
+                    <i class="fab fa-github icon"></i>
+                    <strong>GitHub:</strong> <a href="{{ cv.github_profile }}" target="_blank">{{ cv.github_profile }}</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2 class="section-title">المؤهلات العلمية</h2>
+            <p>{{ cv.education }}</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">الخبرات العملية</h2>
+            <p>{{ cv.experience }}</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">المهارات</h2>
+            <p>{{ cv.skills }}</p>
+        </div>
+
+        {# New section for Certificates #}
+        {% if cv.certificate_images %}
+        <div class="section">
+            <h2 class="section-title">الشهادات والدورات</h2>
+            <div class="certificates-grid">
+                {% for cert_img in cv.certificate_images %}
+                <div class="certificate-item-display">
+                    <a href="{{ url_for('static', filename='uploads/' + cert_img.filename) }}" target="_blank">
+                        {% if cert_img.filename.endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                            <img src="{{ url_for('static', filename='uploads/' + cert_img.filename) }}" alt="{{ cert_img.title or 'شهادة' }}">
+                        {% elif cert_img.filename.endswith('.pdf') %}
+                            <i class="fas fa-file-pdf cert-icon"></i>
+                        {% else %}
+                            <i class="fas fa-file-alt cert-icon"></i>
+                        {% endif %}
+                    </a>
+                    {% if cert_img.title %}
+                        <p>{{ cert_img.title }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="actions-bar">
+        <a href="{{ url_for('index') }}" class="back-link">العودة للقائمة</a>
+        <a href="{{ url_for('edit_cv', cv_id=cv.id) }}" class="edit-link">تعديل السيرة الذاتية</a>
+        <button onclick="window.print();" class="print-button">طباعة / حفظ PDF</button>
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark-mode') {
+            body.classList.add('dark-mode');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                localStorage.setItem('theme', 'light-mode');
+            }
+        });
+    </script>
+</body>
+</html>

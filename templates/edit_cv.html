@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعديل السيرة الذاتية - {{ cv.full_name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Base (Light Mode) Styles */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f7f6;
+            color: #34495e;
+            margin: 0;
+            padding: 25px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .container {
+            max-width: 900px;
+            margin: 25px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.05em;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dbe3ed;
+            border-radius: 8px;
+            font-size: 1.05em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            background-color: #fcfdfe;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        input[type="file"] {
+            padding: 10px 0;
+            transition: color 0.3s ease;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+        .button-group button, .button-group .back-link {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.15em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: white;
+        }
+        .button-group button:hover, .button-group .back-link:hover {
+            transform: translateY(-2px);
+        }
+        .button-group button[type="submit"] {
+            background-color: #007bff;
+        }
+        .button-group button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .button-group .back-link {
+            background-color: #7f8c8d;
+        }
+        .button-group .back-link:hover {
+            background-color: #6c7a89;
+        }
+
+        /* Dark Mode Specific Styles */
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+        .dark-mode .container {
+            background-color: #34495e;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .dark-mode h1 {
+            color: #ecf0f1;
+        }
+        .dark-mode label {
+            color: #bdc3c7;
+        }
+        .dark-mode input[type="text"],
+        .dark-mode input[type="email"],
+        .dark-mode input[type="tel"],
+        .dark-mode input[type="date"],
+        .dark-mode textarea {
+            background-color: #4a627a;
+            border-color: #5f7a96;
+            color: #ecf0f1;
+        }
+        .dark-mode input[type="text"]:focus,
+        .dark-mode input[type="email"]:focus,
+        .dark-mode input[type="tel"]:focus,
+        .dark-mode input[type="date"]:focus,
+        .dark-mode textarea:focus {
+            border-color: #5dade2;
+            box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.3);
+        }
+        .dark-mode input[type="file"] {
+            color: #bdc3c7;
+        }
+        .dark-mode .button-group button[type="submit"] {
+            background-color: #5dade2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        .dark-mode .button-group button[type="submit"]:hover {
+            background-color: #479ed9;
+        }
+        .dark-mode .button-group .back-link {
+            background-color: #5f7a96;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        .dark-mode .button-group .back-link:hover {
+            background-color: #728c9b;
+        }
+
+        /* Dark Mode Toggle Button */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #555;
+            transition: color 0.3s ease;
+            z-index: 1000;
+            outline: none;
+        }
+        .dark-mode-toggle:hover {
+            color: #000;
+        }
+        body.dark-mode .dark-mode-toggle {
+            color: #ecf0f1;
+        }
+        body.dark-mode .dark-mode-toggle:hover {
+            color: #fff;
+        }
+
+        /* Drag & Drop Area Styles */
+        .drop-zone {
+            border: 2px dashed #b0c4de;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            background-color: #f8fcff;
+            color: #777;
+            font-size: 1.1em;
+        }
+        .drop-zone:hover, .drop-zone.drag-over {
+            background-color: #e8f0f8;
+            border-color: #3498db;
+        }
+        .drop-zone i {
+            font-size: 3em;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        .drop-zone input[type="file"] {
+            display: none;
+        }
+        .drop-zone.drag-over {
+            background-color: #eaf6ff;
+            border-color: #2980b9;
+        }
+        .image-preview-personal {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .image-preview-personal img {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #3498db;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .image-actions { /* For clear image checkbox */
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-actions input[type="checkbox"] {
+            margin-left: 8px;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .image-actions label {
+            margin-right: 15px;
+            display: inline-block;
+            font-weight: normal;
+            font-size: 0.95em;
+            color: #666;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+        .dark-mode .drop-zone {
+            border-color: #5f7a96;
+            background-color: #4a627a;
+            color: #bdc3c7;
+        }
+        .dark-mode .drop-zone:hover, .dark-mode .drop-zone.drag-over {
+            background-color: #5f7a96;
+            border-color: #5dade2;
+        }
+        .dark-mode .drop-zone i {
+            color: #5dade2;
+        }
+        .dark-mode .image-preview-personal img {
+            border-color: #5dade2;
+        }
+        .dark-mode .image-actions label {
+            color: #bdc3c7;
+        }
+
+        /* Certificates Section Styles */
+        .certificates-section {
+            border-top: 1px dashed #e0e6ed;
+            padding-top: 30px;
+            margin-top: 30px;
+        }
+        .certificates-section h2 {
+            font-size: 1.8em;
+            color: #3498db;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .certificate-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            background-color: #fcfdfe;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .certificate-item:hover {
+            background-color: #f2f7fb;
+        }
+        .certificate-item .cert-preview-img {
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #b0c4de;
+        }
+        .certificate-item .cert-info {
+            flex-grow: 1;
+        }
+        .certificate-item .cert-info input[type="text"] {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1em;
+        }
+        .certificate-item .remove-cert-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .certificate-item .remove-cert-btn:hover {
+            background-color: #c82333;
+        }
+        .add-certificate-btn {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 0;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.2s ease;
+        }
+        .add-certificate-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .dark-mode .certificates-section {
+            border-color: #4a627a;
+        }
+        .dark-mode .certificates-section h2 {
+            color: #5dade2;
+        }
+        .dark-mode .certificate-item {
+            border-color: #5f7a96;
+            background-color: #4a627a;
+        }
+        .dark-mode .certificate-item:hover {
+            background-color: #5f7a96;
+        }
+        .dark-mode .certificate-item .cert-preview-img {
+            border-color: #5dade2;
+        }
+        .dark-mode .add-certificate-btn {
+            background-color: #5dade2;
+        }
+        .dark-mode .add-certificate-btn:hover {
+            background-color: #479ed9;
+        }
+
+        /* Styles for certificate items already existing */
+        .existing-cert-item .cert-info input[type="file"] {
+            display: none; /* Hide file input for existing certs */
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle" class="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <h1>تعديل السيرة الذاتية: {{ cv.full_name }}</h1>
+        <form method="POST" enctype="multipart/form-data" id="cvForm">
+            <div class="form-group">
+                <label for="full_name">الاسم بالكامل:</label>
+                <input type="text" id="full_name" name="full_name" value="{{ cv.full_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">البريد الإلكتروني:</label>
+                <input type="email" id="email" name="email" value="{{ cv.email }}">
+            </div>
+            <div class="form-group">
+                <label for="phone">رقم الهاتف:</label>
+                <input type="tel" id="phone" name="phone" value="{{ cv.phone }}">
+            </div>
+            <div class="form-group">
+                <label for="address">العنوان:</label>
+                <input type="text" id="address" name="address" value="{{ cv.address }}">
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">تاريخ الميلاد:</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" value="{{ cv.date_of_birth }}">
+            </div>
+            <div class="form-group">
+                <label for="linkedin_profile">رابط ملف LinkedIn الشخصي:</label>
+                <input type="text" id="linkedin_profile" name="linkedin_profile" value="{{ cv.linkedin_profile or '' }}" placeholder="مثال: https://www.linkedin.com/in/اسم-المستخدم">
+            </div>
+            <div class="form-group">
+                <label for="github_profile">رابط ملف GitHub الشخصي:</label>
+                <input type="text" id="github_profile" name="github_profile" value="{{ cv.github_profile or '' }}" placeholder="مثال: https://github.com/اسم-المستخدم">
+            </div>
+            <div class="form-group">
+                <label for="education">المؤهلات العلمية:</label>
+                <textarea id="education" name="education">{{ cv.education }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="experience">الخبرات العملية:</label>
+                <textarea id="experience" name="experience">{{ cv.experience }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="skills">المهارات:</label>
+                <textarea id="skills" name="skills">{{ cv.skills }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>الصورة الشخصية:</label>
+                <div id="dropZonePersonal" class="drop-zone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>اسحب الصورة هنا أو <span style="text-decoration: underline;">انقر للتحميل</span></p>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/*">
+                </div>
+                <div class="image-preview-personal" id="personalImagePreview">
+                    {% if cv.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + cv.image_filename) }}" alt="الصورة الشخصية الحالية">
+                    {% endif %}
+                </div>
+                <div class="image-actions">
+                    <input type="checkbox" id="clear_profile_image" name="clear_profile_image">
+                    <label for="clear_profile_image">حذف الصورة الشخصية الحالية</label>
+                </div>
+            </div>
+
+            <div class="certificates-section">
+                <h2>صور الشهادات</h2>
+                <div id="existingCertificatesContainer">
+                    {% for cert_img in cv.certificate_images %}
+                    <div class="certificate-item existing-cert-item" data-cert-id="{{ cert_img.id }}">
+                        {% if cert_img.filename.endswith(('.png', '.jpg', '.jpeg', '.gif')) %}
+                            <img src="{{ url_for('static', filename='uploads/' + cert_img.filename) }}" alt="معاينة الشهادة" class="cert-preview-img">
+                        {% elif cert_img.filename.endswith('.pdf') %}
+                            <i class="fas fa-file-pdf cert-preview-img" style="font-size: 3em; color: #dc3545;"></i>
+                        {% else %}
+                            <i class="fas fa-file-alt cert-preview-img" style="font-size: 3em; color: #888;"></i>
+                        {% endif %}
+                        <div class="cert-info">
+                            <input type="text" name="certificate_title_{{ cert_img.id }}" value="{{ cert_img.title }}" placeholder="عنوان الشهادة (اختياري)">
+                            </div>
+                        <button type="button" class="remove-existing-cert-btn" data-cert-id="{{ cert_img.id }}">حذف</button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="newCertificatesContainer">
+                    </div>
+                <button type="button" id="addNewCertificateBtn" class="add-certificate-btn">إضافة شهادة جديدة</button>
+            </div>
+
+            <div class="button-group">
+                <button type="submit">حفظ التغييرات</button>
+                <a href="{{ url_for('view_cv', cv_id=cv.id) }}" class="back-link">إلغاء</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark-mode') {
+            body.classList.add('dark-mode');
+        }
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                localStorage.setItem('theme', 'light-mode');
+            }
+        });
+
+        // ===========================================
+        // Profile Image Drag & Drop (same as create_cv.html)
+        // ===========================================
+        const dropZonePersonal = document.getElementById('dropZonePersonal');
+        const personalImageInput = document.getElementById('profile_image');
+        const personalImagePreview = document.getElementById('personalImagePreview');
+        const clearProfileImageCheckbox = document.getElementById('clear_profile_image');
+
+        dropZonePersonal.addEventListener('click', () => {
+            personalImageInput.click();
+            // Uncheck "clear image" if a new file is being selected/dropped
+            if (clearProfileImageCheckbox) clearProfileImageCheckbox.checked = false;
+        });
+
+        personalImageInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length > 0) {
+                previewPersonalImage(files[0]);
+                if (clearProfileImageCheckbox) clearProfileImageCheckbox.checked = false;
+            }
+        });
+
+        dropZonePersonal.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZonePersonal.classList.add('drag-over');
+        });
+
+        dropZonePersonal.addEventListener('dragleave', () => {
+            dropZonePersonal.classList.remove('drag-over');
+        });
+
+        dropZonePersonal.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZonePersonal.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                personalImageInput.files = files;
+                previewPersonalImage(files[0]);
+                if (clearProfileImageCheckbox) clearProfileImageCheckbox.checked = false;
+            }
+        });
+
+        function previewPersonalImage(file) {
+            personalImagePreview.innerHTML = '';
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'صورة شخصية';
+                    personalImagePreview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+       // Handle clear image checkbox
+if (clearProfileImageCheckbox) {
+    clearProfileImageCheckbox.addEventListener('change', () => {
+        if (clearProfileImageCheckbox.checked) {
+            personalImagePreview.innerHTML = ''; // Clear preview if checked
+            personalImageInput.value = ''; // Clear selected file from input
+        } else {
+            // Restore original image if unchecked (if any)
+            personalImagePreview.innerHTML = `{% if cv.image_filename %}<img src="{{ url_for('static', filename='uploads/' + cv.image_filename) }}" alt="الصورة الشخصية الحالية">{% endif %}`;
+        }
+    });
+}
+
+
+        // ===========================================
+        // Certificates Dynamic Fields (New Certificates)
+        // ===========================================
+        const addNewCertificateBtn = document.getElementById('addNewCertificateBtn');
+        const newCertificatesContainer = document.getElementById('newCertificatesContainer');
+        const existingCertificatesContainer = document.getElementById('existingCertificatesContainer');
+        let newCertificateCounter = 0; // To ensure unique names for new files
+
+        // Array to store IDs of certificates to be deleted
+        const certsToDelete = new Set();
+        const cvForm = document.getElementById('cvForm');
+
+        addNewCertificateBtn.addEventListener('click', () => {
+            addCertificateField();
+        });
+
+        function addCertificateField(file = null, title = '') {
+            const certId = `new_cert_${newCertificateCounter++}`;
+            const certItem = document.createElement('div');
+            certItem.classList.add('certificate-item', 'new-cert-item');
+            certItem.setAttribute('data-cert-id', certId); // Use data-cert-id for new certificates
+
+            let previewHtml = '<i class="fas fa-cloud-upload-alt cert-preview-img" style="font-size: 3em; color: #888;"></i>';
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    const imgUrl = URL.createObjectURL(file);
+                    previewHtml = `<img src="${imgUrl}" alt="معاينة الشهادة" class="cert-preview-img">`;
+                } else if (file.type === 'application/pdf') {
+                    previewHtml = `<i class="fas fa-file-pdf cert-preview-img" style="font-size: 3em; color: #dc3545;"></i>`;
+                }
+            }
+
+            certItem.innerHTML = `
+                ${previewHtml}
+                <div class="cert-info">
+                    <input type="text" name="new_certificate_titles" value="${title}" placeholder="عنوان الشهادة (اختياري)">
+                    <input type="file" name="new_certificate_files" accept="image/*, application/pdf" style="display: block;">
+                </div>
+                <button type="button" class="remove-new-cert-btn">حذف</button>
+            `;
+            
+            newCertificatesContainer.appendChild(certItem);
+
+            const removeBtn = certItem.querySelector('.remove-new-cert-btn');
+            removeBtn.addEventListener('click', () => {
+                certItem.remove();
+            });
+
+            // Set the file if provided (for dropped files)
+            const fileInput = certItem.querySelector('input[type="file"]');
+            if (file) {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+            }
+
+            // Handle individual file input change to update its preview
+            fileInput.addEventListener('change', (e) => {
+                const newFile = e.target.files[0];
+                if (newFile) {
+                    let newPreviewHtml = '';
+                    if (newFile.type.startsWith('image/')) {
+                        const imgUrl = URL.createObjectURL(newFile);
+                        newPreviewHtml = `<img src="${imgUrl}" alt="معاينة الشهادة" class="cert-preview-img">`;
+                    } else if (newFile.type === 'application/pdf') {
+                        newPreviewHtml = `<i class="fas fa-file-pdf cert-preview-img" style="font-size: 3em; color: #dc3545;"></i>`;
+                    } else {
+                        newPreviewHtml = `<i class="fas fa-file-upload cert-preview-img" style="font-size: 3em; color: #888;"></i>`;
+                    }
+                    const oldPreview = certItem.querySelector('.cert-preview-img');
+                    if (oldPreview) {
+                        oldPreview.outerHTML = newPreviewHtml;
+                    } else {
+                        certItem.insertAdjacentHTML('afterbegin', newPreviewHtml);
+                    }
+                }
+            });
+        }
+
+        // ===========================================
+        // Handle Removing Existing Certificates
+        // ===========================================
+        document.querySelectorAll('.remove-existing-cert-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const certId = e.target.getAttribute('data-cert-id');
+                certsToDelete.add(certId); // Add ID to the set of IDs to be deleted
+                e.target.closest('.certificate-item').remove(); // Remove from UI
+            });
+        });
+
+        // Append hidden input with IDs to delete before form submission
+        cvForm.addEventListener('submit', () => {
+            certsToDelete.forEach(id => {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'delete_certificate_ids';
+                hiddenInput.value = id;
+                cvForm.appendChild(hiddenInput);
+            });
+        });
+
+        // Optional: Drag & Drop for new certificates section (entire container)
+        newCertificatesContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            newCertificatesContainer.style.backgroundColor = '#e8f0f8';
+            newCertificatesContainer.style.borderColor = '#3498db';
+        });
+
+        newCertificatesContainer.addEventListener('dragleave', () => {
+            newCertificatesContainer.style.backgroundColor = '';
+            newCertificatesContainer.style.borderColor = '';
+        });
+
+        newCertificatesContainer.addEventListener('drop', (e) => {
+            e.preventDefault();
+            newCertificatesContainer.style.backgroundColor = '';
+            newCertificatesContainer.style.borderColor = '';
+            const files = e.dataTransfer.files;
+            for (let i = 0; i < files.length; i++) {
+                addCertificateField(files[i]); // Add a new field for each dropped file
+            }
+        });
+
+    </script>
+</body>
+</html>
